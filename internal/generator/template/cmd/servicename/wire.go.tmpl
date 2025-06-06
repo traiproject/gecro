@@ -1,0 +1,38 @@
+//go:build wireinject
+// +build wireinject
+
+// The build tag makes sure the stub is not built in the final build.
+
+package main
+
+import (
+    commoncfgv1 "{{.MonorepoPrefix}}/proto/config/common/v1"
+
+    "{{.MonorepoPrefix}}/internal/{{.ServiceName}}/biz"
+    "{{.MonorepoPrefix}}/internal/{{.ServiceName}}/data"
+    "{{.MonorepoPrefix}}/internal/{{.ServiceName}}/server"
+    "{{.MonorepoPrefix}}/internal/{{.ServiceName}}/service"
+
+    "github.com/go-kratos/kratos/v2"
+    "github.com/go-kratos/kratos/v2/log"
+    "github.com/google/wire"
+)
+
+// initApp initializes application.
+func initApp(
+    serverConf *conf.Server,
+    dataConf *conf.Data,
+    // traceConf *conf.Tracing,
+    logger log.Logger,
+    appName string,
+    appVersion string,
+    appID string,
+) (*kratos.App, func(), error) {
+    panic(wire.Build(
+        server.ProviderSet,
+        data.ProviderSet,
+        biz.ProviderSet,
+        service.ProviderSet,
+        newApp,
+    ))
+}

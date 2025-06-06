@@ -1,0 +1,23 @@
+module {{.MonorepoPrefix}}/cmd/{{.ServiceName}}
+
+go {{.GoVersion}}
+
+require (
+	// --- Core Kratos & DI Framework ---
+	// The foundational microservice framework for servers, config, logging, etc.
+	github.com/go-kratos/kratos/v2 v2.8.4
+	// The compile-time dependency injection tool
+	github.com/google/wire v0.6.0
+
+	// --- Core Communication (gRPC & Protobuf) ---
+	// Essential for defining and handling gRPC services
+	google.golang.org/grpc v1.65.0
+	// The Protobuf runtime library, required for working with any .proto-generated code
+	google.golang.org/protobuf v1.34.1
+
+	// --- Common Utilities & API Definitions ---
+	// A best-practice utility for optimizing Go processes in containers
+	go.uber.org/automaxprocs v1.5.1
+	// Contains common Google API Protobuf definitions, often needed for HTTP annotations in gRPC-gateway
+	google.golang.org/genproto/googleapis/api v0.0.0-20240528184218-531527333157
+)
