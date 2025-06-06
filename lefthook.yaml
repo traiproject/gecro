@@ -1,0 +1,16 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: Copywrite Header Compliance
+      run: copywrite headers --plan
+    - name: Copywrite License Compliance
+      run: copywrite license --plan
+
+commit-msg:
+  parallel: true
+  scripts:
+    "validate-conventional-commit.sh":
+      runner: bash
+
+output:
+  - failure
