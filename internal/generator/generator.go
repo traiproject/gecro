@@ -51,6 +51,8 @@ type Generator struct {
 func NewGenerator() (*Generator, error) {
 	tmpl, err := template.ParseFS(templateFiles,
 		"template/*/*/*.tmpl",
+		"template/*/*/*/*.tmpl",
+		"template/*/*/*/*/*.tmpl",
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse templates: %w", err)
@@ -80,38 +82,12 @@ func (g *Generator) GenerateService(params ServiceParams) error {
 				{TemplateName: "go.mod.tmpl", FileName: "go.mod"},
 			},
 		},
-		// {
-		// 	RelativePath: "internal/{service}/biz",
-		// 	Files: []FileSpec{
-		// 		{TemplateName: "biz.go.tmpl", FileName: "biz.go"},
-		// 	},
-		// },
-		// {
-		// 	RelativePath: "internal/{service}/data",
-		// 	Files: []FileSpec{
-		// 		{TemplateName: "data.go.tmpl", FileName: "data.go"},
-		// 	},
-		// },
-		// {
-		// 	RelativePath: "internal/{service}/server",
-		// 	Files: []FileSpec{
-		// 		{TemplateName: "grpc.go.tmpl", FileName: "grpc.go"},
-		// 		{TemplateName: "http.go.tmpl", FileName: "http.go"},
-		// 		{TemplateName: "server.go.tmpl", FileName: "server.go"},
-		// 	},
-		// },
-		// {
-		// 	RelativePath: "internal/{service}/service",
-		// 	Files: []FileSpec{
-		// 		{TemplateName: "service.go.tmpl", FileName: "service.go"},
-		// 	},
-		// },
-		// {
-		// 	RelativePath: "proto/config/{service}/v1",
-		// 	Files: []FileSpec{
-		// 		{TemplateName: "config.proto.tmpl", FileName: "config.proto"},
-		// 	},
-		// },
+		{
+			RelativePath: "proto/config/{service}/v1",
+			Files: []FileSpec{
+				{TemplateName: "config.proto.tmpl", FileName: "config.proto"},
+			},
+		},
 		{
 			RelativePath: "configs/{service}/v1",
 			Files: []FileSpec{
@@ -122,6 +98,32 @@ func (g *Generator) GenerateService(params ServiceParams) error {
 			srcs = ["config.yaml"],
 			visibility = ["//visibility:public"],
 			)`,
+		},
+		{
+			RelativePath: "internal/{service}/biz",
+			Files: []FileSpec{
+				{TemplateName: "biz.go.tmpl", FileName: "biz.go"},
+			},
+		},
+		{
+			RelativePath: "internal/{service}/data",
+			Files: []FileSpec{
+				{TemplateName: "data.go.tmpl", FileName: "data.go"},
+			},
+		},
+		{
+			RelativePath: "internal/{service}/server",
+			Files: []FileSpec{
+				{TemplateName: "grpc.go.tmpl", FileName: "grpc.go"},
+				{TemplateName: "http.go.tmpl", FileName: "http.go"},
+				{TemplateName: "server.go.tmpl", FileName: "server.go"},
+			},
+		},
+		{
+			RelativePath: "internal/{service}/service",
+			Files: []FileSpec{
+				{TemplateName: "service.go.tmpl", FileName: "service.go"},
+			},
 		},
 	}
 
