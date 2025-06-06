@@ -9,24 +9,21 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *commoncfgv1.Server, itemService *service.{{.UseCaseNamePascalCase}}Service, logger log.Logger) *http.Server {
-    var opts =http.ServerOption{
-        http.Middleware(
-            recovery.Recovery(),
-        ),
-    }
-    if c.Http.Network!= "" {
-        opts = append(opts, http.Network(c.Http.Network))
-    }
-    if c.Http.Addr!= "" {
-        opts = append(opts, http.Address(c.Http.Addr))
-    }
-    if c.Http.Timeout!= nil {
-        opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
-    }
-    srv := http.NewServer(opts...)
-    // TODO: Register HTTP routes using generated v1.Register{{.UseCaseNamePascalCase}}HTTPServer(srv, itemService)
-    // This requires API protos with HTTP annotations.
-    // For a basic setup without full API protos, you might manually register handlers or skip.
-    return srv
+func NewHTTPServer(c *commoncfgv1.Server, logger log.Logger) *http.Server {
+	var opts = []http.ServerOption{
+		http.Middleware(
+			recovery.Recovery(),
+		),
+	}
+	if c.Http.Network != "" {
+		opts = append(opts, http.Network(c.Http.Network))
+	}
+	if c.Http.Addr != "" {
+		opts = append(opts, http.Address(c.Http.Addr))
+	}
+	if c.Http.Timeout != nil {
+		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
+	}
+	srv := http.NewServer(opts...)
+	return srv
 }

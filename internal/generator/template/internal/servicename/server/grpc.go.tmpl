@@ -9,23 +9,21 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *commoncfgv1.Server, itemService *service.{{.UseCaseNamePascalCase}}Service, logger log.Logger) *grpc.Server {
-    var opts =grpc.ServerOption{
-        grpc.Middleware(
-            recovery.Recovery(),
-        ),
-    }
-    if c.Grpc.Network!= "" {
-        opts = append(opts, grpc.Network(c.Grpc.Network))
-    }
-    if c.Grpc.Addr!= "" {
-        opts = append(opts, grpc.Address(c.Grpc.Addr))
-    }
-    if c.Grpc.Timeout!= nil {
-        opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
-    }
-    srv := grpc.NewServer(opts...)
-    // TODO: Register gRPC services using generated v1.Register{{.UseCaseNamePascalCase}}Server(srv, itemService)
-    // This requires API protos.
-    return srv
+func NewGRPCServer(c *commoncfgv1.Server, logger log.Logger) *grpc.Server {
+	var opts = []grpc.ServerOption{
+		grpc.Middleware(
+			recovery.Recovery(),
+		),
+	}
+	if c.Grpc.Network != "" {
+		opts = append(opts, grpc.Network(c.Grpc.Network))
+	}
+	if c.Grpc.Addr != "" {
+		opts = append(opts, grpc.Address(c.Grpc.Addr))
+	}
+	if c.Grpc.Timeout != nil {
+		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
+	}
+	srv := grpc.NewServer(opts...)
+	return srv
 }
