@@ -4,7 +4,9 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"go.trai.ch/msgen/internal/generator"
 
@@ -21,9 +23,9 @@ var newCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		const moduleFile = "MODULE.bazel"
 
-		// if _, err := os.Stat(moduleFile); errors.Is(err, os.ErrNotExist) {
-		// 	return fmt.Errorf("This command must be run from the monorepo root (missing %s)", moduleFile)
-		// }
+		if _, err := os.Stat(moduleFile); errors.Is(err, os.ErrNotExist) {
+			return fmt.Errorf("This command must be run from the monorepo root (missing %s)", moduleFile)
+		}
 
 		serviceName := args[0]
 
