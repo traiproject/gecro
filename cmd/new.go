@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"go.trai.ch/msgen/internal/generator"
+	"go.trai.ch/gecro/internal/generator"
 
 	"github.com/spf13/cobra"
 )

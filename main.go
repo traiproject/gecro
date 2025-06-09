@@ -3,7 +3,7 @@
 
 package main
 
-import "go.trai.ch/msgen/cmd"
+import "go.trai.ch/gecro/cmd"
 
 func main() {
 	cmd.Execute()

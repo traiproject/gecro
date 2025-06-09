@@ -1,4 +1,4 @@
-module go.trai.ch/msgen
+module go.trai.ch/gecro
 
 go 1.24.3
 
