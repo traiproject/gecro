@@ -18,7 +18,7 @@ var newCmd = &cobra.Command{
 	Use:   "new [servicename]",
 	Short: "Creates a new microservice",
 	Long: `Creates a new microservice with a specified name
-	Example: msgen new test`,
+	Example: gecro new test`,
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		const moduleFile = "MODULE.bazel"
