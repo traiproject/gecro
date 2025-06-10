@@ -1,0 +1,30 @@
+# .github/workflows/release-please.yml
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run release-please
+        uses: google-github-actions/release-please-action@v4
+        with:
+          # This is the personal access token that release-please will use to
+          # create the release PR.
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # This is the configuration file that we created in the previous step.
+          config-file: release-please-config.json
+          # This is the manifest file that release-please will use to update
+          # the versions.
+          manifest-file: .release-please-manifest.json
