@@ -1,3 +1,6 @@
+// Copyright (c) TRAI
+// SPDX-License-Identifier: MIT
+
 // config/config.go
 package config
 
