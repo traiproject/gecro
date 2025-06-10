@@ -6,6 +6,7 @@ package generator
 import (
 	"embed"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -53,7 +54,18 @@ func NewGenerator() (*Generator, error) {
 	}, nil
 }
 
+func printCreated(path string) {
+	fmt.Printf("%sCREATED%s %s\n", green, reset, path)
+}
+
+func printDryRun(path string) {
+	fmt.Printf("%sDRY RUN%s %s\n", green, reset, path)
+}
+
 func (g *Generator) GenerateService(config config.Config) error {
+	if config.DryRun {
+		fmt.Println("--- Performing a dry run. No files will be written. ---")
+	}
 	fmt.Printf("Generating service '%s' at '%s'\n", config.ServiceName, config.OutputDir)
 
 	// 1. Perform detailed input validation (domain-specific)
@@ -123,10 +135,6 @@ func (g *Generator) GenerateService(config config.Config) error {
 	return nil
 }
 
-func printCreated(path string) {
-	fmt.Printf("%sCREATED%s %s\n", green, reset, path)
-}
-
 func (g *Generator) createDirectoriesAndFiles(specs []DirectorySpec, config config.Config) error {
 	for _, spec := range specs {
 		// Replace the {service} placeholder with the actual service name
@@ -135,9 +143,11 @@ func (g *Generator) createDirectoriesAndFiles(specs []DirectorySpec, config conf
 		// Construct the full directory path
 		fullDirPath := filepath.Join(config.OutputDir, replacedPath)
 
-		// Create the directory structure
-		if err := os.MkdirAll(fullDirPath, 0755); err != nil {
-			return fmt.Errorf("failed to create directory '%s': %w", fullDirPath, err)
+		if !config.DryRun {
+			// Create the directory structure
+			if err := os.MkdirAll(fullDirPath, 0755); err != nil {
+				return fmt.Errorf("failed to create directory '%s': %w", fullDirPath, err)
+			}
 		}
 
 		// Generate each file within the directory
@@ -151,11 +161,11 @@ func (g *Generator) createDirectoriesAndFiles(specs []DirectorySpec, config conf
 		// Create an empty BUILD.bazel file in the directory
 		buildFilePath := filepath.Join(fullDirPath, "BUILD.bazel")
 		if spec.BuildFileContent != "" {
-			if err := g.createBuildFileWithContent(buildFilePath, spec.BuildFileContent); err != nil {
+			if err := g.createBuildFileWithContent(buildFilePath, spec.BuildFileContent, config); err != nil {
 				return err
 			}
 		} else {
-			if err := g.createEmptyBuildFile(buildFilePath); err != nil {
+			if err := g.createEmptyBuildFile(buildFilePath, config); err != nil {
 				return err
 			}
 		}
@@ -172,6 +182,15 @@ func (g *Generator) generateFileFromTemplate(templateName, outputPath string, co
 		return fmt.Errorf("failed to check existence of '%s': %w", outputPath, err)
 	}
 
+	if config.DryRun {
+		// Execute the template into a discard buffer to test it
+		if err := g.templates.ExecuteTemplate(io.Discard, templateName, config); err != nil {
+			return fmt.Errorf("failed to execute template '%s' for '%s' during dry run: %w", templateName, outputPath, err)
+		}
+		printDryRun(outputPath)
+		return nil
+	}
+
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return fmt.Errorf("failed to create file '%s': %w", outputPath, err)
@@ -185,7 +204,20 @@ func (g *Generator) generateFileFromTemplate(templateName, outputPath string, co
 	return nil
 }
 
-func (g *Generator) createBuildFileWithContent(outputPath, content string) error {
+func (g *Generator) createBuildFileWithContent(outputPath, content string, config config.Config) error {
+	if _, err := os.Stat(outputPath); err == nil {
+		// File exists, no need to create
+		return nil
+	} else if !os.IsNotExist(err) {
+		// An error other than non-existence occurred
+		return fmt.Errorf("failed to check existence of '%s': %w", outputPath, err)
+	}
+
+	if config.DryRun {
+		printDryRun(outputPath)
+		return nil
+	}
+
 	file, err := os.Create(outputPath)
 	if err != nil {
 		return fmt.Errorf("failed to create BUILD.bazel at '%s': %w", outputPath, err)
@@ -200,13 +232,18 @@ func (g *Generator) createBuildFileWithContent(outputPath, content string) error
 	return nil
 }
 
-func (g *Generator) createEmptyBuildFile(outputPath string) error {
+func (g *Generator) createEmptyBuildFile(outputPath string, config config.Config) error {
 	if _, err := os.Stat(outputPath); err == nil {
 		// File exists, no need to create
 		return nil
 	} else if !os.IsNotExist(err) {
 		// An error other than non-existence occurred
 		return fmt.Errorf("failed to check existence of '%s': %w", outputPath, err)
+	}
+
+	if config.DryRun {
+		printDryRun(outputPath)
+		return nil
 	}
 
 	file, err := os.Create(outputPath)

@@ -23,6 +23,12 @@ var newCmd = &cobra.Command{
 		config := config.Cfg
 		config.ServiceName = args[0]
 
+		dryRun, err := cmd.Flags().GetBool("dry-run")
+		if err != nil {
+			return err
+		}
+		config.DryRun = dryRun
+
 		generator, err := generator.NewGenerator()
 		if err != nil {
 			return fmt.Errorf("failed creating new generator: %w", err)

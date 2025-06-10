@@ -24,6 +24,7 @@ type Config struct {
 	MonorepoPrefix string   `mapstructure:"monorepo-prefix"`
 	OutputDir      string   `mapstructure:"output-dir"`
 	Versions       Versions `mapstructure:"versions"`
+	DryRun         bool
 }
 
 var Cfg *Config
