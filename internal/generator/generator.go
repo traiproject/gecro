@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"go.trai.ch/gecro/config"
 )
 
 //go:embed all:template
@@ -18,19 +20,6 @@ var templateFiles embed.FS
 // ANSI escape code for green text
 const green = "\033[32m"
 const reset = "\033[0m"
-
-// ServiceParams encapsulates all parameters needed to generate a service.
-type ServiceParams struct {
-	ServiceName           string
-	MonorepoPrefix        string
-	OutputDir             string
-	KratosVersion         string
-	WireVersion           string
-	GoVersion             string
-	DefaultConfigPath     string
-	ServiceNamePascalCase string
-	ServiceNameLowerCase  string
-}
 
 type FileSpec struct {
 	TemplateName string
@@ -64,11 +53,11 @@ func NewGenerator() (*Generator, error) {
 	}, nil
 }
 
-func (g *Generator) GenerateService(params ServiceParams) error {
-	fmt.Printf("Generating service '%s' at '%s'\n", params.ServiceName, params.OutputDir)
+func (g *Generator) GenerateService(config config.Config) error {
+	fmt.Printf("Generating service '%s' at '%s'\n", config.ServiceName, config.OutputDir)
 
 	// 1. Perform detailed input validation (domain-specific)
-	if params.ServiceName == "" {
+	if config.ServiceName == "" {
 		return fmt.Errorf("service name cannot be empty")
 	}
 	// Add more validation for ModulePath, etc.
@@ -127,7 +116,7 @@ func (g *Generator) GenerateService(params ServiceParams) error {
 		},
 	}
 
-	if err := g.createDirectoriesAndFiles(specs, params); err != nil {
+	if err := g.createDirectoriesAndFiles(specs, config); err != nil {
 		return fmt.Errorf("Error generating microservice: %w", err)
 	}
 
@@ -138,13 +127,13 @@ func printCreated(path string) {
 	fmt.Printf("%sCREATED%s %s\n", green, reset, path)
 }
 
-func (g *Generator) createDirectoriesAndFiles(specs []DirectorySpec, params ServiceParams) error {
+func (g *Generator) createDirectoriesAndFiles(specs []DirectorySpec, config config.Config) error {
 	for _, spec := range specs {
 		// Replace the {service} placeholder with the actual service name
-		replacedPath := strings.ReplaceAll(spec.RelativePath, "{service}", params.ServiceName)
+		replacedPath := strings.ReplaceAll(spec.RelativePath, "{service}", config.ServiceName)
 
 		// Construct the full directory path
-		fullDirPath := filepath.Join(params.OutputDir, replacedPath)
+		fullDirPath := filepath.Join(config.OutputDir, replacedPath)
 
 		// Create the directory structure
 		if err := os.MkdirAll(fullDirPath, 0755); err != nil {
@@ -154,7 +143,7 @@ func (g *Generator) createDirectoriesAndFiles(specs []DirectorySpec, params Serv
 		// Generate each file within the directory
 		for _, file := range spec.Files {
 			outputPath := filepath.Join(fullDirPath, file.FileName)
-			if err := g.generateFileFromTemplate(file.TemplateName, outputPath, params); err != nil {
+			if err := g.generateFileFromTemplate(file.TemplateName, outputPath, config); err != nil {
 				return err
 			}
 		}
@@ -174,7 +163,7 @@ func (g *Generator) createDirectoriesAndFiles(specs []DirectorySpec, params Serv
 	return nil
 }
 
-func (g *Generator) generateFileFromTemplate(templateName, outputPath string, params ServiceParams) error {
+func (g *Generator) generateFileFromTemplate(templateName, outputPath string, config config.Config) error {
 	if _, err := os.Stat(outputPath); err == nil {
 		// File exists, no need to create
 		return nil
@@ -189,7 +178,7 @@ func (g *Generator) generateFileFromTemplate(templateName, outputPath string, pa
 	}
 	defer file.Close()
 
-	if err := g.templates.ExecuteTemplate(file, templateName, params); err != nil {
+	if err := g.templates.ExecuteTemplate(file, templateName, config); err != nil {
 		return fmt.Errorf("failed to execute template '%s' for '%s': %w", templateName, outputPath, err)
 	}
 	printCreated(outputPath)

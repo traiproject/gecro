@@ -4,15 +4,17 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+	"go.trai.ch/gecro/config"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "gecro",
-	Short: "Kratos microservice monorepo with bazel utility",
+	Short: "A generative CLI for Go-Kratos microservices with Bazel",
 }
 
 func Execute() {
@@ -23,5 +25,10 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	cobra.OnInitialize(func() {
+		if err := config.Load(); err != nil {
+			fmt.Fprintf(os.Stderr, "Config error: %v", err)
+			os.Exit(1)
+		}
+	})
 }
