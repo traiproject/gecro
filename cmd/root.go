@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"go.trai.ch/gecro/cmd/service"
 	"go.trai.ch/gecro/config"
 )
 
@@ -25,6 +26,7 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.AddCommand(service.ServiceCmd)
 	cobra.OnInitialize(func() {
 		if err := config.Load(); err != nil {
 			fmt.Fprintf(os.Stderr, "Config error: %v", err)
