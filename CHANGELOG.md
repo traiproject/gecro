@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/traiproject/gecro/compare/v1.0.0...v1.1.0) (2025-06-11)
+
+
+### Features
+
+* introduce service command ([c1f2394](https://github.com/traiproject/gecro/commit/c1f2394d06feaf4edd018c8fcede169f61940cc0))
+
 ## 1.0.0 (2025-06-10)
 
 
