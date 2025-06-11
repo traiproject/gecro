@@ -1,7 +1,7 @@
 // Copyright (c) TRAI
 // SPDX-License-Identifier: MIT
 
-package cmd
+package service
 
 import (
 	"fmt"
@@ -14,8 +14,9 @@ import (
 
 // newCmd represents the new command
 var newCmd = &cobra.Command{
-	Use:   "new [servicename]",
-	Short: "Creates a new microservice",
+	Use:     "new [servicename]",
+	Aliases: []string{"n"},
+	Short:   "Creates a new microservice",
 	Long: `Creates a new microservice with a specified name
 	Example: gecro new test`,
 	Args: cobra.ExactArgs(1),
@@ -43,7 +44,7 @@ var newCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(newCmd)
+	ServiceCmd.AddCommand(newCmd)
 
 	newCmd.Flags().BoolP("dry-run", "d", true, "Dry run")
 }
