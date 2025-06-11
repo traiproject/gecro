@@ -1,0 +1,8 @@
+package {{ .Name }}
+
+import "fmt"
+
+// Hello returns a greeting.
+func Hello() string {
+    return fmt.Sprintf("Hello from package: {{ .Name }}")
+}
