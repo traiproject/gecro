@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0](https://github.com/traiproject/gecro/compare/v1.1.0...v1.2.0) (2025-06-11)
+
+
+### Features
+
+* add new command under pkg ([ab9a2fd](https://github.com/traiproject/gecro/commit/ab9a2fd973ffd023576e6dda17518827a58ac940))
+* add new GeneratePkg func and improve parse template functionality ([cd7b223](https://github.com/traiproject/gecro/commit/cd7b223fcce86354f4c168a8d1f65bf37dd73621))
+* add pkg command under root command ([2778d84](https://github.com/traiproject/gecro/commit/2778d84eb1247303b86c3f354845c1a51ed7f974))
+
 ## [1.1.0](https://github.com/traiproject/gecro/compare/v1.0.0...v1.1.0) (2025-06-11)
 
 
