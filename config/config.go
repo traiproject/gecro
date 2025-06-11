@@ -23,7 +23,7 @@ type Versions struct {
 }
 
 type Config struct {
-	ServiceName    string
+	Name           string
 	MonorepoPrefix string   `mapstructure:"monorepo-prefix"`
 	OutputDir      string   `mapstructure:"output-dir"`
 	Versions       Versions `mapstructure:"versions"`

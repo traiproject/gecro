@@ -22,7 +22,7 @@ var newCmd = &cobra.Command{
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		config := config.Cfg
-		config.ServiceName = args[0]
+		config.Name = args[0]
 
 		dryRun, err := cmd.Flags().GetBool("dry-run")
 		if err != nil {
@@ -46,5 +46,5 @@ var newCmd = &cobra.Command{
 func init() {
 	ServiceCmd.AddCommand(newCmd)
 
-	newCmd.Flags().BoolP("dry-run", "d", true, "Dry run")
+	newCmd.Flags().BoolP("dry-run", "d", false, "Dry run")
 }

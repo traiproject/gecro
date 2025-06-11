@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+// Package name for the Protobuf namespace. Helps avoid naming collisions.
+package proto.config.{{ .Name }}.v1;
+
+option go_package = "go.trai.ch/trai/gen/go/config/{{ .Name }}/v1;servicecfgv1";
