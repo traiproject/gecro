@@ -4,13 +4,11 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 	"go.trai.ch/gecro/cmd/pkg"
 	"go.trai.ch/gecro/cmd/service"
-	"go.trai.ch/gecro/config"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -29,11 +27,4 @@ func Execute() {
 func init() {
 	rootCmd.AddCommand(service.ServiceCmd)
 	rootCmd.AddCommand(pkg.PkgCmd)
-
-	cobra.OnInitialize(func() {
-		if err := config.Load(); err != nil {
-			fmt.Fprintf(os.Stderr, "Config error: %v", err)
-			os.Exit(1)
-		}
-	})
 }
