@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/traiproject/gecro/compare/v1.2.0...v1.3.0) (2025-06-12)
+
+
+### Features
+
+* add init command to create a gecro config file ([7b6c361](https://github.com/traiproject/gecro/commit/7b6c3618b3a23699f9c11726d137df555f16ca54))
+* move confil load into persistent pre run because not every command demands a existing config ([d5e8666](https://github.com/traiproject/gecro/commit/d5e8666c6f30904486e8639a02432f8da8b9e895))
+
 ## [1.2.0](https://github.com/traiproject/gecro/compare/v1.1.0...v1.2.0) (2025-06-11)
 
 
