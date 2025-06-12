@@ -83,6 +83,23 @@ func printDryRun(path string) {
 	fmt.Printf("%sDRY RUN%s %s\n", green, reset, path)
 }
 
+func (g *Generator) GenerateConfig(force bool, cfg config.Config) error {
+	outputPath := "gecro.yaml"
+
+	if !force {
+		if _, err := os.Stat(outputPath); err == nil {
+			return fmt.Errorf("'%s' already exists. Use --force to overwrite", outputPath)
+		}
+	}
+
+	err := g.generateFileFromTemplate("template/gecro.yaml.tmpl", outputPath, cfg)
+	if err != nil {
+		return fmt.Errorf("failed to generate config file: %w", err)
+	}
+
+	return nil
+}
+
 func (g *Generator) GeneratePkg(config config.Config) error {
 	if config.DryRun {
 		fmt.Println("--- Performing a dry run for a new package. No files will be written. ---")
