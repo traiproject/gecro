@@ -17,7 +17,7 @@ type Versions struct {
 	Kratos       string `mapstructure:"kratos"`
 	Wire         string `mapstructure:"wire"`
 	Grpc         string `mapstructure:"grpc"`
-	Protobuf     string `mapstructure:"wire"`
+	Protobuf     string `mapstructure:"protobuf"`
 	Automaxprocs string `mapstructure:"automaxprocs"`
 	Genproto     string `mapstructure:"genproto"`
 }
