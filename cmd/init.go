@@ -12,20 +12,6 @@ import (
 	"go.trai.ch/gecro/internal/generator"
 )
 
-var cfg = config.Config{
-	MonorepoPrefix: "github.com/org/repo",
-	OutputDir:      ".",
-	Versions: config.Versions{
-		Go:           "1.21",
-		Kratos:       "v2.3.0",
-		Wire:         "v0.4.0",
-		Grpc:         "v1.65.0",
-		Protobuf:     "v1.34.1",
-		Automaxprocs: "v1.5.1",
-		Genproto:     "v0.0.0-20240528184218-531527333157",
-	},
-}
-
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Creates a default gecro.yaml config file",
@@ -69,13 +55,13 @@ func init() {
 	// Add flags for all config options
 	initCmd.Flags().String("monorepo-prefix", "github.com/org/repo", "Monorepo prefix")
 	initCmd.Flags().String("output-dir", ".", "Output directory for generated files")
-	initCmd.Flags().String("versions.go", "1.22", "Go version")
-	initCmd.Flags().String("versions.kratos", "v2.7.0", "Kratos version")
+	initCmd.Flags().String("versions.go", "1.24.3", "Go version")
+	initCmd.Flags().String("versions.kratos", "v2.8.4", "Kratos version")
 	initCmd.Flags().String("versions.wire", "v0.6.0", "Wire version")
-	initCmd.Flags().String("versions.grpc", "1.62.1", "gRPC version")
+	initCmd.Flags().String("versions.grpc", "v1.61.1", "gRPC version")
 	initCmd.Flags().String("versions.protobuf", "v1.33.0", "Protobuf version")
-	initCmd.Flags().String("versions.automaxprocs", "1.5.1", "Automaxprocs version")
-	initCmd.Flags().String("versions.genproto", "v2.3.4", "Genproto version")
+	initCmd.Flags().String("versions.automaxprocs", "v1.6.0", "Automaxprocs version")
+	initCmd.Flags().String("versions.genproto", "v0.0.0-20240102182953-50ed04b92917", "Genproto version")
 
 	// Bind flags with viper
 	viper.BindPFlag("monorepo-prefix", initCmd.Flags().Lookup("monorepo-prefix"))
