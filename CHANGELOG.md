@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/traiproject/gecro/compare/v1.3.0...v1.3.1) (2025-06-13)
+
+
+### Bug Fixes
+
+* fix default versions ([0daac38](https://github.com/traiproject/gecro/commit/0daac38ead9bf0b6efadf8c44221d290b7121d6a))
+* fix mapstructure path for protobuf version ([838ca2b](https://github.com/traiproject/gecro/commit/838ca2b3720eb9cfa8d4a98276b25a40eb72349d))
+
 ## [1.3.0](https://github.com/traiproject/gecro/compare/v1.2.0...v1.3.0) (2025-06-12)
 
 
