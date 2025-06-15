@@ -52,25 +52,22 @@ func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().BoolP("force", "f", false, "Force overwrite of existing gecro.yaml")
 
-	// Add flags for all config options
-	initCmd.Flags().String("monorepo-prefix", viper.GetString("monorepo-prefix"), "Monorepo prefix")
-	initCmd.Flags().String("output-dir", viper.GetString("output-dir"), "Output directory for generated files")
-	initCmd.Flags().String("versions.go", viper.GetString("versions.go"), "Go version")
-	initCmd.Flags().String("versions.kratos", viper.GetString("versions.kratos"), "Kratos version")
-	initCmd.Flags().String("versions.wire", viper.GetString("versions.wire"), "Wire version")
-	initCmd.Flags().String("versions.grpc", viper.GetString("versions.grpc"), "gRPC version")
-	initCmd.Flags().String("versions.protobuf", viper.GetString("versions.protobuf"), "Protobuf version")
-	initCmd.Flags().String("versions.automaxprocs", viper.GetString("versions.automaxprocs"), "Automaxprocs version")
-	initCmd.Flags().String("versions.genproto", viper.GetString("versions.genproto"), "Genproto version")
+	// Define flags in a map to add them in a loop.
+	// Defaults are pulled from Viper, which are now reliably set.
+	flags := map[string]string{
+		"monorepo-prefix":       "Monorepo prefix",
+		"output-dir":            "Output directory for generated files",
+		"versions.go":           "Go version",
+		"versions.kratos":       "Kratos version",
+		"versions.wire":         "Wire version",
+		"versions.grpc":         "gRPC version",
+		"versions.protobuf":     "Protobuf version",
+		"versions.automaxprocs": "Automaxprocs version",
+		"versions.genproto":     "Genproto version",
+	}
 
-	// Bind flags with viper
-	viper.BindPFlag("monorepo-prefix", initCmd.Flags().Lookup("monorepo-prefix"))
-	viper.BindPFlag("output-dir", initCmd.Flags().Lookup("output-dir"))
-	viper.BindPFlag("versions.go", initCmd.Flags().Lookup("versions.go"))
-	viper.BindPFlag("versions.kratos", initCmd.Flags().Lookup("versions.kratos"))
-	viper.BindPFlag("versions.wire", initCmd.Flags().Lookup("versions.wire"))
-	viper.BindPFlag("versions.grpc", initCmd.Flags().Lookup("versions.grpc"))
-	viper.BindPFlag("versions.protobuf", initCmd.Flags().Lookup("versions.protobuf"))
-	viper.BindPFlag("versions.automaxprocs", initCmd.Flags().Lookup("versions.automaxprocs"))
-	viper.BindPFlag("versions.genproto", initCmd.Flags().Lookup("versions.genproto"))
+	for key, description := range flags {
+		initCmd.Flags().String(key, viper.GetString(key), description)
+		viper.BindPFlag(key, initCmd.Flags().Lookup(key))
+	}
 }
