@@ -53,15 +53,15 @@ func init() {
 	initCmd.Flags().BoolP("force", "f", false, "Force overwrite of existing gecro.yaml")
 
 	// Add flags for all config options
-	initCmd.Flags().String("monorepo-prefix", "github.com/org/repo", "Monorepo prefix")
-	initCmd.Flags().String("output-dir", ".", "Output directory for generated files")
-	initCmd.Flags().String("versions.go", "1.24.3", "Go version")
-	initCmd.Flags().String("versions.kratos", "v2.8.4", "Kratos version")
-	initCmd.Flags().String("versions.wire", "v0.6.0", "Wire version")
-	initCmd.Flags().String("versions.grpc", "v1.61.1", "gRPC version")
-	initCmd.Flags().String("versions.protobuf", "v1.33.0", "Protobuf version")
-	initCmd.Flags().String("versions.automaxprocs", "v1.6.0", "Automaxprocs version")
-	initCmd.Flags().String("versions.genproto", "v0.0.0-20240102182953-50ed04b92917", "Genproto version")
+	initCmd.Flags().String("monorepo-prefix", viper.GetString("monorepo-prefix"), "Monorepo prefix")
+	initCmd.Flags().String("output-dir", viper.GetString("output-dir"), "Output directory for generated files")
+	initCmd.Flags().String("versions.go", viper.GetString("versions.go"), "Go version")
+	initCmd.Flags().String("versions.kratos", viper.GetString("versions.kratos"), "Kratos version")
+	initCmd.Flags().String("versions.wire", viper.GetString("versions.wire"), "Wire version")
+	initCmd.Flags().String("versions.grpc", viper.GetString("versions.grpc"), "gRPC version")
+	initCmd.Flags().String("versions.protobuf", viper.GetString("versions.protobuf"), "Protobuf version")
+	initCmd.Flags().String("versions.automaxprocs", viper.GetString("versions.automaxprocs"), "Automaxprocs version")
+	initCmd.Flags().String("versions.genproto", viper.GetString("versions.genproto"), "Genproto version")
 
 	// Bind flags with viper
 	viper.BindPFlag("monorepo-prefix", initCmd.Flags().Lookup("monorepo-prefix"))

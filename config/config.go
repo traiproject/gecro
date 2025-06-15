@@ -34,6 +34,17 @@ var Cfg *Config
 
 // Load reads gecro.yaml and unmarshals into Cfg
 func Load() error {
+	// Set default values
+	viper.SetDefault("monorepo-prefix", "github.com/org/repo")
+	viper.SetDefault("output-dir", ".")
+	viper.SetDefault("versions.go", "1.24.3")
+	viper.SetDefault("versions.kratos", "v2.8.4")
+	viper.SetDefault("versions.wire", "v0.6.0")
+	viper.SetDefault("versions.grpc", "v1.61.1")
+	viper.SetDefault("versions.protobuf", "v1.33.0")
+	viper.SetDefault("versions.automaxprocs", "v1.6.0")
+	viper.SetDefault("versions.genproto", "v0.0.0-20240102182953-50ed04b92917")
+
 	cwd, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("cannot determine current directory: %w", err)
