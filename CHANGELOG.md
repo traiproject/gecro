@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/traiproject/gecro/compare/v0.1.0...v0.2.0) (2025-06-15)
+
+
+### Features
+
+* add viper defaults and flags for init command ([7ce3eb7](https://github.com/traiproject/gecro/commit/7ce3eb70bff9b17f417bf6b49f1f96d520286378))
+
 ## [0.1.0](https://github.com/traiproject/gecro/compare/v0.0.1...v0.1.0) (2025-06-13)
 
 
