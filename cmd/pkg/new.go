@@ -5,6 +5,9 @@ package pkg
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+	"strings"
 
 	"go.trai.ch/gecro/config"
 	"go.trai.ch/gecro/internal/generator"
@@ -42,8 +45,27 @@ var newCmd = &cobra.Command{
 			return fmt.Errorf("failed generating new package: %w", err)
 		}
 
+		if err := runPostCreateHook(config.DryRun); err != nil {
+			return err
+		}
+
 		return nil
 	},
+}
+
+func runPostCreateHook(dryRun bool) error {
+	if dryRun {
+		return nil
+	}
+
+	command := "bazel"
+	args := []string{"run", "//:gazelle"}
+
+	fmt.Printf("Running post-create hook: %s %s\n", command, strings.Join(args, " "))
+	cmd := exec.Command(command, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
 }
 
 func init() {
